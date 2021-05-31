@@ -10,6 +10,8 @@ target
 *.#*
 *.idea
 .DS_Store
+.vscode
+.project
 build.local.properties
 /src/main/javascript/lib/.#tabcomplete.js
 /src/main/javascript/plugins/.#example-1.js
@@ -24,6 +26,7 @@ build.local.properties
 /src/docs/build/classes/.netbeans_automatic_build
 /src/docs/build/classes/.netbeans_update_resources
 build
+target
 nbproject
 /manifest.mf
 /platform.properties
