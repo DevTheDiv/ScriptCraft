@@ -1,4 +1,12 @@
 RELEASE NOTES
+
+=============
+4.0.0-alpha-1 Release (2021 06 08)
+--------------------------
+Removed A Large Amount of CanaryMod Implementations
+Updated to Spigot 1.16.5
+Removed Drone lb
+
 =============
 3.3.0 Release (2017 10 15)
 --------------------------

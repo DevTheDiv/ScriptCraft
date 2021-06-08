@@ -26,8 +26,8 @@ var types = org.bukkit.Material.values();
 for (t in types) {
   if (types[t] && types[t].ordinal) {
     name = ('' + types[t].name()).toLowerCase();
-    name = name.replace(/(_.)/g, function(a) {
-      return a.replace(/_/, '').toUpperCase();
+    name = name.replace(new RegExp('(_.)', 'g'), function(a) {
+      return a.replace(new RegExp('_'), '').toUpperCase();
     });
     enumVals.push(' * ' + name + '()');
   }

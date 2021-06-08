@@ -33,8 +33,8 @@ function sorter(precedence) {
     // convert from Java string to JS string
     a = '' + a;
     b = '' + b;
-    var aparts = a.split(/\//);
-    var bparts = b.split(/\//);
+    var aparts = a.split(new RegExp('\/'));
+    var bparts = b.split(new RegExp('\/'));
     var adir = aparts.slice(3, aparts.length - 1).join('/');
     var afile = aparts[aparts.length - 1];
     var bdir = bparts.slice(3, bparts.length - 1).join('/');
@@ -51,7 +51,7 @@ function sorter(precedence) {
     }
     if (adir < bdir) return -1;
     if (adir > bdir) return 1;
-    afile = afile.replace(/\.js$/, '');
+    afile = afile.replace(new RegExp('\.js$'), '');
     if (afile == adir) {
       return -1;
     } else {
@@ -101,10 +101,10 @@ store.sort(
 
 var contents = [];
 foreach(store, function(filename) {
-  if (filename.match(/babel\.js/)) {
+  if (filename.match(new RegExp('babel\.js'))) {
     return;
   }
-  if (filename.match(/underscore\.js/)) {
+  if (filename.match(new RegExp('underscore\.js'))) {
     return;
   }
   var br = new io.BufferedReader(new io.FileReader(filename));

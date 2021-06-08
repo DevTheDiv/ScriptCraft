@@ -5,7 +5,7 @@ module.exports = {
     "nashorn": true
   },
   "globals": {
-    "__plugin": true,
+    "__plugin__": true,
     "server": true,
     "events": true,
     "addUnloadHandler": true,
@@ -15,7 +15,7 @@ module.exports = {
     "echo": true,
     "scload": true,
     "nashorn": true,
-    "plugin": true, // not the same as __plugin!!!
+    "plugin": true, // not the same as __plugin__!!!
     "command": true,
     "config": true,
     "window": false,

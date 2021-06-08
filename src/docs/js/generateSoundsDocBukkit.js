@@ -46,7 +46,7 @@ for (i = 0; i < sounds.length; i++) {
   soundName = '' + sound.name();
   var methodName = ('' + soundName)
     .toLowerCase()
-    .replace(/_(.)/g, function(a, b) {
+    .replace(new RegExp('_(.)', 'g'), function(a, b) {
       return b.toUpperCase();
     });
   enumVals.push(' * ' + methodName + '()');

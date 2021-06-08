@@ -164,13 +164,13 @@ via javascript once the ScriptCraft plugin is loaded. There are a
 couple of useful Java objects exposed via javascript in the
 ScriptCraft plugin:
 
- * `__plugin` &ndash; the ScriptCraft Plugin itself. This is a useful
-   starting point for accessing other SpigotMC objects. The `__plugin`
+ * `__plugin__` &ndash; the ScriptCraft Plugin itself. This is a useful
+   starting point for accessing other SpigotMC objects. The `__plugin__`
    object is of type [org.bukkit.plugin.Plugin][api] and all
    of its properties and methods are accessible. For example: `js
-   __plugin.name` returns the plugin's name
+   __plugin__.name` returns the plugin's name
    (JavaScript is more concise than the equivalent Java code:
-   `__plugin.getName()` ).
+   `__plugin__.getName()` ).
 
  * `server` &ndash; The top-level org.bukkit.Server object. See the [SpigotMC API docs][spigotapi] for reference.
 

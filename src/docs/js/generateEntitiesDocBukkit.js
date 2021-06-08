@@ -34,7 +34,7 @@ var entitytypes = org.bukkit.entity.EntityType.values();
 for (t in entitytypes) {
   if (entitytypes[t] && entitytypes[t].ordinal) {
     name = entitytypes[t].name();
-    name = ('' + name).replace(/^(.*)/, function(a) {
+    name = ('' + name).replace(new RegExp('^(.*)'), function(a) {
       return a.toLowerCase();
     });
     enumVals.push(' * ' + name + '()');

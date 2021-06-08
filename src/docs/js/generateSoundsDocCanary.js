@@ -45,7 +45,7 @@ sounds = Packages.net.canarymod.api.world.effects.SoundEffect.Type.values();
 for (i = 0; i < sounds.length; i++) {
   sound = sounds[i];
   soundName = '' + sound.name();
-  methodName = ('' + soundName).toLowerCase().replace(/_(.)/g, function(a, b) {
+  methodName = ('' + soundName).toLowerCase().replace(new RegExp('_(.)', 'g'), function(a, b) {
     return b.toUpperCase();
   });
   enumVals.push(' * ' + methodName + '()');

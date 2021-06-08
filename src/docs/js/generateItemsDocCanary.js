@@ -26,7 +26,7 @@ for (i = 0; i < materials.length; i++) {
     continue;
   }
   var materialField = materials[i];
-  name = ('' + materialField.name).replace(/^(.)/, function(a) {
+  name = ('' + materialField.name).replace(new RegExp('^(.)'), function(a) {
     return a.toLowerCase();
   });
   enumVals.push(' * ' + name + '()');
