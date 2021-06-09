@@ -1,4 +1,4 @@
-function _loadJSON(filename) {
+function scloadJSON(filename) {
     var File = java.io.File,
         FileReader = java.io.FileReader,
         BufferedReader = java.io.BufferedReader;
@@ -36,5 +36,3 @@ function _loadJSON(filename) {
     }
     return result;
 }
-
-var scloadJSON = _loadJSON;

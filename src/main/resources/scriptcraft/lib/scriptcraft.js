@@ -3,11 +3,13 @@
 var global = this;
 
 // ADD GLOBALS AND TOOLS TO SCOPE
+
 // SCRoot
 load("./scriptcraft/init/globals.js");
 //Timers - setTimeout(), setInterval(), clearInterval(), clearTimeout()
-
 load("./scriptcraft/init/timers.js");
+
+
 // isJavaObject()
 load("./scriptcraft/init/java-utils.js");
 // find()
@@ -19,16 +21,16 @@ load("./scriptcraft/init/echo.js");
 
 //_save
 load("./scriptcraft/init/save.js");
-// _load
+// scload
 load("./scriptcraft/init/load.js");
-// _loadJSOJN
+// scloadJSON
 load("./scriptcraft/init/loadJSON.js");
 
 
 var configFile = new File(SCRoot, 'data/');
 configFile.mkdirs();
 configFile = new File(configFile, 'global-config.json');
-var config = _load(configFile);
+var config = scload(configFile);
 if (!config) {
   config = { verbose: false };
 }
@@ -52,7 +54,7 @@ var requireHooks = {
   }
 };
 
-var configRequire = _load(SCRoot + '/lib/require.js', true);
+var configRequire = scload(SCRoot + '/lib/require.js', true);
 global.require = configRequire(
   SCRoot,
   modulePaths,
@@ -147,7 +149,6 @@ function __onCommand(sender, cmd, label, args) {
                   : value;
               };
               echo(sender, JSON.stringify(codeRes, replacer, 2));
-
             }
           } catch (displayError) {
             console.error(`Error while trying to display result: ${codeRes}, Error: ${displayError}`);

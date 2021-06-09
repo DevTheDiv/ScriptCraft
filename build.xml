@@ -1,202 +1,15 @@
 <project name="scriptcraft" default="package" basedir=".">
-  <property file="build.properties"/>
-  <description>Builds the scriptcraft.jar file - a plugin for bukkit</description>
-  <!-- ScriptCraft works with:
-       * CanaryMod
-       * Bukkit
-       * Glowstone (which is bukkit-compatible)
-       * Spigot (which is bukkit-compatible)
-  -->
-  <property name="src.canary" location="src/main/java/canary"/>
-  <property name="src.bukkit" location="src/main/java/bukkit"/>
-
-  <!-- compiles against these libraries -->
-  <property name="lib.jav8" location="lib/jav8.jar"/>
-  <property name="lib.canary" location="lib/canarymod.jar"/>
-  <property name="lib.bukkit" location="lib/spigot.jar"/>
-  
-
+  <description>Used To Push New Build</description>
   <property name="build" location="target/classes"/>
   <property name="dist" location="target/" />
-  <!-- <property name="minecraft.dir" location="${dist}/minecraft" /> -->
   <property name="minecraft.dir" location="C:/Users/devin/Desktop/Projects/CraftMods1-16-5" />
 
-  <property name="js-plugins-dir" value="scriptcraft"/>
-  <property name="http.agent" value="'Walter'" />
-
-
-  <macrodef name="jscript">
-    <attribute name="src"/>
-    <attribute name="out"/>
-    <attribute name="err"/>
-    <attribute name="lib"/>
-    <element name="js-args" implicit="yes" optional="true"/>
-    <sequential>
-      <echo message="cp=${build}:${lib.canary}:${lib.bukkit}"></echo>
-      <echo message="src=@{src} out=@{out} err=@{err}"></echo>
-      <java classname="jscript"
-	    failonerror="true"
-	    fork="true"
-      	output="@{out}"
-      	error="@{err}"
-   	   >
-	<classpath>
-          <pathelement path="${build}"/>
-	  <pathelement path="@{lib}"/>
-	</classpath>
-      <arg value="@{src}"/>
-      <js-args/>
-      </java>
-    </sequential>
-  </macrodef>
-
-  <target name="init">
-    <property file="build.local.properties"/>
-    <tstamp>
-      <format property="DSTAMP"
-              pattern="yyyy-MM-dd"
-              locale="en,UK"/>
-    </tstamp>
-    <mkdir dir="${build}"/>
-
-    <available file="${lib.canary}" property="canary.present"/>
-    <available file="${dist}/js/modules/underscore.js" property="underscore.present"/>
-    <available file="${dist}/js/modules/babel.js" property="babel.present"/>
-  </target>
-
-
-  <target name="compile-plugins" depends="init" description="compile canary plugin source">
-    <javac includeantruntime="false"
-           source="1.6"
-           target="1.6"
-           destdir="${build}"
-           debug="true">
-      <src path="${src.canary}"/>
-      <src path="${src.bukkit}"/>
-      <classpath>
-	<pathelement path="${lib.canary}" />
-	<pathelement path="${lib.bukkit}" />
-      </classpath>
-    </javac>
-  </target>
-
-  <target name="gendocs"
-	  depends="construct-ypgpm, construct-api-ref"
-	  description="Generate API documentation">
-  </target>
-
-  <target name="compile-docs" depends="init">
-    <javac includeantruntime="false" srcdir="src/docs/java" destdir="${build}">
-      <classpath>
-	<pathelement path="${lib.canary}"/>
-      </classpath>
-    </javac>
-  </target>
-
-  <target name="generate-api-ref-entries" depends="copy-js,compile-docs,init">
-
-    <jscript src="src/docs/js/generateApiDocs.js"
-	     out="${dist}/apiref.md"
-	     lib="${lib.bukkit}"
-	     err="${dist}/gen-api-error.log">
-      <arg value="${dist}/js"/>
-    </jscript>
-
-    <jscript src="src/docs/js/generateItemsDocBukkit.js"
-	     out="${dist}/items-bukkit.md"
-	     lib="${lib.bukkit}"
-	     err="${dist}/gen-items-error.log" />
-
-    <jscript src="src/docs/js/generateSoundsDocBukkit.js"
-	     out="${dist}/sounds-bukkit.md"
-	     lib="${lib.bukkit}"
-	     err="${dist}/gen-sounds-error.log" />
-
-    <jscript src="src/docs/js/generateEntitiesDocBukkit.js"
-	     out="${dist}/entities-bukkit.md"
-	     lib="${lib.bukkit}"
-	     err="${dist}/gen-entities-error.log" />
-
-    <concat destfile="${dist}/apiref-con.md">
-      <fileset file="${dist}/apiref.md" />
-      <fileset file="${dist}/items-bukkit.md" />
-      <fileset file="${dist}/sounds-bukkit.md" />
-      <fileset file="${dist}/entities-bukkit.md" />
-    </concat>
-
-  </target>
-
-  <target name="gen-events-helper-bukkit" depends="compile-docs,init">
-    <mkdir dir="${dist}/js/lib"/>
-    <jscript src="src/docs/js/generateEventsHelper.js"
-	     out="${dist}/scriptcraft/lib/events-helper-bukkit.js"
-	     lib="${lib.bukkit}"
-	     err="${dist}/gen-events-bukkit-error.log">
-    </jscript>
-  </target>
-
-  <target name="construct-api-ref" depends="gen-toc-apiref,init">
-
-    <concat destfile="docs/API-Reference.md">
-      <header filtering="no" trimleading="yes">&lt;!--
-IMPORTANT NOTE FOR CONTRIBUTORS
--------------------------------
-Contributors: This file is generated from comments in javascript source files src/main/js/*
-If you would like to make changes, change the comments in the src/main/js/* files instead.
---&gt;
-# ScriptCraft API Reference
-
-Walter Higgins
-
-[walter.higgins@gmail.com][email]
-
-[email]: mailto:walter.higgins@gmail.com?subject=ScriptCraft_API_Reference
-
-      </header>
-      <fileset file="${dist}/toc-apiref.md" />
-      <fileset file="${dist}/apiref-con.md" />
-   </concat>
-  </target>
-
-  <target name="gen-toc-apiref" depends="compile-docs,generate-api-ref-entries, init" description="Generate Table of Contents for API Reference">
-    <jscript src="src/docs/js/generateTOC.js"
-	     out="${dist}/toc-apiref.md"
-	     lib="${lib.bukkit}"
-	     err="${dist}/gen-toc-error.log">
-      <arg value="${dist}/apiref-con.md"/>
-    </jscript>
-  </target>
-
-  <target name="gen-toc-ypgpm" depends="compile-docs,init" description="Generate Table of Contents for Young Programmers Guide">
-    <jscript src="src/docs/js/generateTOC.js"
-	     out="${dist}/toc-ypgpm.md"
-	     lib="${lib.bukkit}"
-	     err="${dist}/gen-ypgpm-error.log">
-      <arg value="src/docs/templates/ypgpm.md"/>
-    </jscript>
-  </target>
-
-  <!-- Piece together the Young persons' guide from template and generated table of contents -->
-  <target name="construct-ypgpm" depends="gen-toc-ypgpm,init">
-    <concat destfile="docs/YoungPersonsGuideToProgrammingMinecraft.md">
-      <header filtering="no" trimleading="yes">&lt;!--
-  IMPORTANT NOTE FOR CONTRIBUTORS
-  -------------------------------
-  Contributors: This file is generated from source file src/docs/templates/ypgpm.md
-  If you would like to make changes, change file src/docs/templates/ypgpm.md instead
---&gt;
-# The Young Person's Guide to Programming in Minecraft
-      </header>
-      <fileset file="${dist}/toc-ypgpm.md" />
-      <fileset file="src/docs/templates/ypgpm.md" />
-   </concat>
-  </target>
 
   <target name="clean" description="clean up" >
     <delete dir="${dist}"/>
   </target>
 
-  <target name="update-live-cb" description="Copy the built plugin to the live folder for testing.">
+  <target name="push-build" description="Copy the built plugin to the live folder for testing.">
     <mkdir dir="${minecraft.dir}/plugins" />
     <delete>
       <fileset dir="${minecraft.dir}/plugins/" includes="ScriptCraft*.*"/>
@@ -206,4 +19,5 @@ Walter Higgins
       <fileset dir="${dist}" includes="ScriptCraft*.*"/>
     </copy>
   </target>
+
 </project>

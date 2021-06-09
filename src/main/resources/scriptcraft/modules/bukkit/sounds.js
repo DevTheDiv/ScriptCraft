@@ -1,5 +1,4 @@
 var bkLocation = Packages.org.bukkit.Location,
-  i = 0,
   foreach = require('utils').foreach,
   allSounds = Packages.org.bukkit.Sound.values(),
   len = allSounds.length,
@@ -26,7 +25,7 @@ function play(sound, locationOrHasLocation, volume, pitch) {
   location.world.playSound(location, sound, volume, pitch);
 }
 
-for (; i < len; i++) {
+for (var i = 0; i < len; i++) {
   sound = allSounds[i];
   soundName = '' + sound.name();
   var methodName = soundName.toLowerCase().replace(/_(.)/g, function(a, b) {

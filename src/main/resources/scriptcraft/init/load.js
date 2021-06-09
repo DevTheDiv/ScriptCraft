@@ -1,4 +1,4 @@
-function _load(filename, warnOnFileNotFound) {
+function scload(filename, warnOnFileNotFound) {
     var File = java.io.File,
         FileReader = java.io.FileReader,
         BufferedReader = java.io.BufferedReader;
@@ -42,5 +42,3 @@ function _load(filename, warnOnFileNotFound) {
     }
     return result;
 }
-
-var scload = _load;

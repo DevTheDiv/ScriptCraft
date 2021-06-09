@@ -1,4 +1,4 @@
-function _save(objToSave, filename) {
+function scsave(objToSave, filename) {
     var File = java.io.File,
         FileWriter = java.io.FileWriter;
         PrintWriter = java.io.PrintWriter;
@@ -16,5 +16,3 @@ function _save(objToSave, filename) {
     out.println(objectToStr);
     out.close();
 }
-
-var scsave = _save;
