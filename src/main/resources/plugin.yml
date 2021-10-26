@@ -1,6 +1,7 @@
 name: scriptcraft
 main: org.scriptcraftjs.bukkit.ScriptCraftPlugin
-version: [[version]]
+version: 4.0.0.1
+description: ScriptCraft version 4.0.0-alpha-1 - Javascript In Minecraft!.
 commands:
    js:
       description: Evaluate javascript.

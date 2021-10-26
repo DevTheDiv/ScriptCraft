@@ -1,6 +1,7 @@
 # ScriptCraft - Modding Minecraft with Javascript
 
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/walterhiggins/ScriptCraft?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/walterhiggins/ScriptCraft?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ScriptCraft lets you write Minecraft Mods using Javascript - a
 programming language that's relatively easy to learn and use.
@@ -163,13 +164,13 @@ via javascript once the ScriptCraft plugin is loaded. There are a
 couple of useful Java objects exposed via javascript in the
 ScriptCraft plugin:
 
- * `__plugin` &ndash; the ScriptCraft Plugin itself. This is a useful
-   starting point for accessing other SpigotMC objects. The `__plugin`
+ * `__plugin__` &ndash; the ScriptCraft Plugin itself. This is a useful
+   starting point for accessing other SpigotMC objects. The `__plugin__`
    object is of type [org.bukkit.plugin.Plugin][api] and all
    of its properties and methods are accessible. For example: `js
-   __plugin.name` returns the plugin's name
+   __plugin__.name` returns the plugin's name
    (JavaScript is more concise than the equivalent Java code:
-   `__plugin.getName()` ).
+   `__plugin__.getName()` ).
 
  * `server` &ndash; The top-level org.bukkit.Server object. See the [SpigotMC API docs][spigotapi] for reference.
 
@@ -177,7 +178,7 @@ ScriptCraft plugin:
    invoked the `/js` command. Again, this is a good jumping off point for
    diving into the SpigotMC API.
 
-[dl]: http://scriptcraftjs.org/download/latest
+[dl]: https://github.com/walterhiggins/ScriptCraft/releases/latest
 [api]: https://hub.spigotmc.org/javadocs/spigot/
 [ic]: http://canarymod.net/releases
 [spigotdl]: https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
@@ -211,8 +212,6 @@ be set to true to get the latest core ScriptCraft code . The modules
 and plugins directories are optional and not part of ScriptCraft core.
 
 # Further Reading
-
-ScriptCraft has [its own website][website] with further information.
 
  * To get started using ScriptCraft to Learn JavaScript, read [The Young Person's Guide to Programming in Minecraft][yp].
  * The ScriptCraft [API documentation][api].
@@ -255,7 +254,6 @@ You can find all files used to build this container in github project: [docker-s
 [yp]: docs/YoungPersonsGuideToProgrammingMinecraft.md
 [mm]: docs/Anatomy-of-a-Plugin.md
 [api]: docs/API-Reference.md
-[website]: http://scriptcraftjs.org/
 [cd]: http://coderdojo.com/
 [scr]: http://scratch.mit.edu/
 [cda]: http://cdathenry.wordpress.com/category/modderdojo/
