@@ -7,6 +7,7 @@
 
   <target name="clean" description="clean up" >
     <delete dir="${dist}"/>
+    <delete dir="${minecraft.dir}/javascript"/>
   </target>
 
   <target name="push-build" description="Copy the built plugin to the live folder for testing.">
@@ -20,4 +21,12 @@
     </copy>
   </target>
 
+  <target name="push-scripts" description="Copy The JS into the Minecraft Directory">
+    <delete>
+      <fileset dir="${minecraft.dir}/javascript/" includes=".*"/>
+    </delete>
+    <copy todir="${minecraft.dir}/javascript/">
+      <fileset dir="src/main/resources/javascript/"/>
+    </copy>
+  </target>
 </project>

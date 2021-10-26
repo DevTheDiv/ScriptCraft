@@ -1,5 +1,0 @@
-language: java
-dist: xenial
-jdk:
-  - oraclejdk9
-

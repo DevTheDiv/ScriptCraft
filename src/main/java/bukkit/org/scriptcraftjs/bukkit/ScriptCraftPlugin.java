@@ -13,6 +13,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarEntry;
 
 import java.net.URL;
+import java.sql.Array;
 import java.net.JarURLConnection;
 
 import java.io.*;
@@ -34,11 +35,7 @@ public class ScriptCraftPlugin extends JavaPlugin
     private String NO_JAVASCRIPT_MESSAGE = "No JavaScript Engine available. ScriptCraft will not work without Javascript.";
     protected GraalJSScriptEngine engine = null;
 
-
-
-
     ScriptCraftPlugin self = this;
-
 
     @Override public void onEnable()
     {
@@ -54,13 +51,13 @@ public class ScriptCraftPlugin extends JavaPlugin
             //     System.out.println(f.getLanguageName()+" -> "+f.getEngineName()+" ->"+f.getNames().toString());
             // }
 
-            File scdir = new File("scriptcraft");
-            if(scdir.exists() == false ){
+            File scdir = new File("javascript");
+            if(scdir.exists() == false){
                 FileUtils.forceMkdir(scdir);
             }
 
             // Loop through all resources
-            Enumeration<URL> res  = classLoader.getResources("scriptcraft");
+            Enumeration<URL> res  = classLoader.getResources("javascript");
             while (res.hasMoreElements()) {
                 URL url = res.nextElement();
                 JarURLConnection urlcon = (JarURLConnection) (url.openConnection());
@@ -71,7 +68,7 @@ public class ScriptCraftPlugin extends JavaPlugin
                     JarEntry element = entries.nextElement();
                     String name = element.getName();
                     // If this is a scriptcraft resource we will export it out of the jar
-                    if (name.startsWith("scriptcraft")){
+                    if (name.startsWith("javascript")){
                         // if it already exists continue
                         if(new File(name).exists()) continue;
                         System.out.println("Generating ScriptCraft File " + name);
@@ -95,34 +92,26 @@ public class ScriptCraftPlugin extends JavaPlugin
                 .allowCreateThread(true)
                 .allowIO(true)
                 .allowExperimentalOptions(true)
-                .option("js.nashorn-compat", "true")
                 .option("js.ecmascript-version", "2021")
-                .option("js.v8-compat", "true")
-                // .option("js.commonjs-require", "true")
-                // .option("js.commonjs-require-cwd", scdir.getAbsolutePath())
+                .option("js.commonjs-require", "true")
+                .option("js.commonjs-require-cwd", "./javascript/")
                 // .option("js.experimental-foreign-object-prototype", "true")
                 // .option("js.regexp-static-result", "true")
                 .option("js.foreign-object-prototype", "true");
 
             this.engine = GraalJSScriptEngine.create(null, builder);
             this.engine.put("__plugin__", this);
+            this.engine.put("__src__", scdir);
 
-
-            // Generate event helpers
-            File gee = new File("scriptcraft/init/generateEventsHelper.js");
-            InputStreamReader helpers = new InputStreamReader( new FileInputStream(gee));
-            this.engine.eval(helpers);
 
 
             //Now start up scriptcraft
-            File sc = new File("scriptcraft/lib/scriptcraft.js");
+            File sc = new File("./javascript/init/scriptcraft.js");
             InputStreamReader jscript = new InputStreamReader( new FileInputStream(sc));
             this.engine.eval(jscript);
 
-
-            Invocable inv = (Invocable) this.engine;
-            inv.invokeFunction("__onEnable", this.engine, this, sc);
-
+            Invocable inv = (Invocable) this.engine;            
+            inv.invokeFunction("__onEnable", sc);
         } catch (Exception e) {
             e.printStackTrace();
             this.getLogger().severe(e.getMessage());
@@ -131,19 +120,32 @@ public class ScriptCraftPlugin extends JavaPlugin
         }
     }
 
+    @Override public void onDisable() {
+        if (this.engine == null) {
+            this.getLogger().severe(NO_JAVASCRIPT_MESSAGE);
+            return;
+        }
+        try {
+            ((Invocable)this.engine).invokeFunction("__onDisable");
+        } catch (Exception se) {
+            this.getLogger().severe(se.toString());
+            se.printStackTrace();
+        }
+    }
 
-    public List<String> onTabComplete(CommandSender sender, Command cmd,
-                                      String alias,
-                                      String[] args)
+
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args)
     {
         List<String> result = new ArrayList<String>();
         if (this.engine == null) {
             this.getLogger().severe(NO_JAVASCRIPT_MESSAGE);
-            return null;
+            return result;
         }
         try {
             Invocable inv = (Invocable)this.engine;
-            inv.invokeFunction("__onTabComplete", result, sender, cmd, alias, args);
+            Object jsres = inv.invokeFunction("__onTabComplete", sender, cmd, alias, args);
+            this.getLogger().severe( jsres.toString());
+
         } catch (Exception e) {
             sender.sendMessage(e.getMessage());
             e.printStackTrace();
@@ -159,9 +161,6 @@ public class ScriptCraftPlugin extends JavaPlugin
             return false;
         }
         try {
-            // File sc = new File("scriptcraft/lib/scriptcraft.js");
-            // InputStreamReader jscript = new InputStreamReader( new FileInputStream(sc));
-            // this.engine.eval(jscript);
             jsResult = ((Invocable)this.engine).invokeFunction("__onCommand", sender, cmd, label, args);
         } catch (Exception se) {
             this.getLogger().severe(se.toString());

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "../javascript",
+    "target": "es6",
+    "module": "commonjs",
+    "allowJs": false,
+    "strict": true,
+    "strictNullChecks":true,  
+    "alwaysStrict": true,
+    "skipLibCheck": true,
+    "typeRoots": [
+      "src/types"
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@js/lib/*": ["./lib/*"],
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" }
+    ]
+  },
+  "ignoreDefinitions": [ "Packages", "Java" ]
+}
