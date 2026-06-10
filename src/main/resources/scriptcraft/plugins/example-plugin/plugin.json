@@ -1,0 +1,15 @@
+{
+    "name": "example-plugin",
+    "version": "1.0.0",
+    "main": "index.js",
+    "description": "A modern ScriptCraft plugin example.",
+    "config": {
+        "welcomeMessage": "Welcome to the modernized ScriptCraft!"
+    },
+    "commands": {
+        "greet": {
+            "aliases": ["hello", "hi"],
+            "description": "Greets the player."
+        }
+    }
+}

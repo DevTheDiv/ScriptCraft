@@ -96,32 +96,25 @@ public class ScriptCraftPlugin extends JavaPlugin
                 .allowIO(true)
                 .allowExperimentalOptions(true)
                 .option("js.nashorn-compat", "true")
-                .option("js.ecmascript-version", "2021")
+                .option("js.ecmascript-version", "latest")
                 .option("js.v8-compat", "true")
-                // .option("js.commonjs-require", "true")
-                // .option("js.commonjs-require-cwd", scdir.getAbsolutePath())
-                // .option("js.experimental-foreign-object-prototype", "true")
-                // .option("js.regexp-static-result", "true")
+                .option("js.commonjs-require", "true")
+                .option("js.commonjs-require-cwd", scdir.getAbsolutePath())
+                .option("js.commonjs-require-path", "lib" + File.pathSeparator + "modules")
+                .option("js.esm-eval-returns-exports", "true")
                 .option("js.foreign-object-prototype", "true");
 
             this.engine = GraalJSScriptEngine.create(null, builder);
             this.engine.put("__plugin__", this);
 
 
-            // Generate event helpers
-            File gee = new File("scriptcraft/init/generateEventsHelper.js");
-            InputStreamReader helpers = new InputStreamReader( new FileInputStream(gee));
-            this.engine.eval(helpers);
-
-
             //Now start up scriptcraft
-            File sc = new File("scriptcraft/lib/scriptcraft.js");
-            InputStreamReader jscript = new InputStreamReader( new FileInputStream(sc));
+            File bootstrap = new File("scriptcraft/bootstrap.js");
+            InputStreamReader jscript = new InputStreamReader( new FileInputStream(bootstrap));
             this.engine.eval(jscript);
 
-
             Invocable inv = (Invocable) this.engine;
-            inv.invokeFunction("__onEnable", this.engine, this, sc);
+            inv.invokeFunction("__onEnable");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,19 +129,10 @@ public class ScriptCraftPlugin extends JavaPlugin
                                       String alias,
                                       String[] args)
     {
-        List<String> result = new ArrayList<String>();
-        if (this.engine == null) {
-            this.getLogger().severe(NO_JAVASCRIPT_MESSAGE);
-            return null;
-        }
-        try {
-            Invocable inv = (Invocable)this.engine;
-            inv.invokeFunction("__onTabComplete", result, sender, cmd, alias, args);
-        } catch (Exception e) {
-            sender.sendMessage(e.getMessage());
-            e.printStackTrace();
-        }
-        return result;
+        // Tab completion is now handled directly by the dynamically registered BukkitCommands
+        // and the native-command.js utility, so we no longer need to proxy it through the 
+        // legacy __onTabComplete global JS function for the base /jsp command.
+        return new ArrayList<String>();
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -159,9 +143,6 @@ public class ScriptCraftPlugin extends JavaPlugin
             return false;
         }
         try {
-            // File sc = new File("scriptcraft/lib/scriptcraft.js");
-            // InputStreamReader jscript = new InputStreamReader( new FileInputStream(sc));
-            // this.engine.eval(jscript);
             jsResult = ((Invocable)this.engine).invokeFunction("__onCommand", sender, cmd, label, args);
         } catch (Exception se) {
             this.getLogger().severe(se.toString());

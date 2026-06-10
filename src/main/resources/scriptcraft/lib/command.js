@@ -42,6 +42,15 @@ var executeCmd = function(args, player) {
 /*
   define a new JSP command.
 */
+/**
+ * Defines a new JavaScript plugin command (JSP).
+ * 
+ * @param {string|function} name The name of the command, or the callback function if it has a name.
+ * @param {function} [func] The callback function to execute when the command is called.
+ * @param {string[]} [options] An array of options for the command (e.g., tab-completion candidates).
+ * @param {boolean} [intercepts] If true, this command will intercept all JSP calls.
+ * @returns {function} The callback function.
+ */
 var defineCmd = function(name, func, options, intercepts) {
   if (typeof name == 'function') {
     intercepts = options;
